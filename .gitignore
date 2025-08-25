@@ -1,3 +1,6 @@
+# R data / compiled stan models
+*.rds
+
 # History files
 .Rhistory
 .Rapp.history

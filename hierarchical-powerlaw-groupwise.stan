@@ -5,28 +5,25 @@ data {
     array[N] int<lower=1> tau;       // Observed data
 }
 
+transformed data {
+    // log(1), log(2), ..., log(K)
+    int K = 1000;
+    vector[K] logk;
+    for (k in 1:K) logk[k] = log(k);
+}
+
 parameters {
     vector<lower=0>[I] eta; // eta associated with each id_group
     //real<lower=0> sigma;       // Stddev of eta prior
 }
 
 transformed parameters {
-  // estimate the zeta function using Kahan summation
-  array[I] real z;
+  // estimate the log zeta function
+  vector[I] log_z;
 
   for (i in 1:I) {
-    real s = 0;
-    real c = 0;   // compensation
-    for (k in 1:1000) {
-      real term = exp(-eta[i] * log(k));  // numerically stable version of pow(k, -eta[i])
-      real y_k = term - c;
-      real t = s + y_k;
-      c = (t - s) - y_k;
-      s = t;
-    }
-
-    // Store the zeta function approximation for each group
-    z[i] = s;
+    // Store the log zeta function approximation
+    log_z[i] = log_sum_exp(-eta[i] * logk);
   }
 }
 
@@ -36,6 +33,6 @@ model {
     //eta ~ normal(1, sigma);
 
     for (n in 1:N) {
-        target += -eta[id_group[n]] * log(tau[n]) - log(z[id_group[n]]);       // power law
+        target += -eta[id_group[n]] * log(tau[n]) - log_z[id_group[n]];       // power law
     }
 }

@@ -6,7 +6,7 @@ library(poweRlaw)
 set.seed(42)
 
 # Define parameters
-N <- 150000         # Number of observations
+N <- 50000          # Number of observations
 I <- 10             # Number of unique IDs
 mu_true <- 1.0     # True mu
 sigma_true <- 0.2  # True sigma
@@ -16,11 +16,15 @@ tau_min <- 1       # Minimum tau
 eta <- rnorm(I, mean = mu_true, sd = sigma_true)
 
 # Generate pairs of IDs
-id_a <- sample(1:I, N, replace = TRUE)
-id_b <- sample(1:I, N, replace = TRUE)
+id_a0 <- sample(1:I, N, replace = TRUE)
+id_b0 <- sample(1:I, N, replace = TRUE)
+
+## ensure id_a < id_b
+id_a <- pmin(id_a0, id_b0)
+id_b <- pmax(id_a0, id_b0)
 
 # Get group IDs for each pair
-id_group <- paste(pmin(id_a, id_b), pmax(id_a, id_b), sep = "_")
+id_group <- paste(id_a, id_b, sep = "_")
 id_group_all <- unique(id_group)
 id_group <- match(id_group, id_group_all)
 

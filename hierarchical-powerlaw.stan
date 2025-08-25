@@ -20,7 +20,7 @@ transformed data {
 
 parameters {
     vector<lower=0>[I] eta; // eta associated with each ID
-    real<lower=0> sigma;       // Stddev of eta prior
+    #real<lower=0> sigma;       // Stddev of eta prior
 }
 
 transformed parameters {
@@ -39,7 +39,7 @@ transformed parameters {
 model {
     // Priors
     // normal dist for eta
-    eta ~ normal(1, sigma);
+    #eta ~ normal(1, sigma);
 
     for (n in 1:N) {
         target += -alpha[id_group[n]] * log(tau[n]) - log_z[id_group[n]];       // power law
