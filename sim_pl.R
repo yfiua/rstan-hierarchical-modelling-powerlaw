@@ -17,7 +17,9 @@ eta <- rnorm(I, mean = mu_true, sd = sigma_true)
 
 # Generate pairs of IDs
 id_a0 <- sample(1:I, N, replace = TRUE)
-id_b0 <- sample(1:I, N, replace = TRUE)
+id_b0 <- sapply(id_a0, function(x) {
+  sample(setdiff(1:I, x), 1)   # ensure id_a0 != id_b0 
+})
 
 ## ensure id_a < id_b
 id_a <- pmin(id_a0, id_b0)

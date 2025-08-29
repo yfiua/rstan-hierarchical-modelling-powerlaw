@@ -1,0 +1,27 @@
+% version 2.7
+
+@all: [deps.results.eta-estimation];
+
+>deps.results.eta-estimation: NS
+{
+    for N in $(cat NS); do
+        echo "results/eta-estimation/$N.csv"
+    done
+}
+
+NS = {25 50 75 100 125 150 200 250}
+
+>results/eta-estimation/$N.csv: -p results/eta-estimation/ eta-estimation.R
+{
+    Rscript eta-estimation.R $N
+}
+
+results/eta-estimation/
+{
+    mkdir -p results/eta-estimation/
+}
+
+@clean:
+{
+    rm -rf results/
+}
