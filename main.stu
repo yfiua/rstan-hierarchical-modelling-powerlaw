@@ -11,9 +11,14 @@
 
 NS = {25 50 75 100 125 150 200 250}
 
->results/eta-estimation/$N.csv: -p results/eta-estimation/ eta-estimation.R
+>results/eta-estimation/$N.csv: -p results/eta-estimation/ eta-estimation.R sim-pl-eta-reliability.csv
 {
     Rscript eta-estimation.R $N
+}
+
+sim-pl-eta-reliability.csv: sim-pl-eta-reliability.R
+{
+    Rscript sim-pl-eta-reliability.R
 }
 
 results/eta-estimation/
@@ -24,4 +29,5 @@ results/eta-estimation/
 @clean:
 {
     rm -rf results/
+    rm -f sim-pl-eta-reliability.csv
 }

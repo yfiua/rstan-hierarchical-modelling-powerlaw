@@ -1,5 +1,6 @@
 library(dplyr)
 library(rstan)
+library(readr)
 library(poweRlaw)
 
 # read params from CLI
@@ -22,11 +23,8 @@ tau_min <- 1        # minimum tau
 # calculate total N
 N <- I / 2 * N_per_id
 
-# generate latent eta for each ID
-eta <- rnorm(I, mean = mu_true, sd = sigma_true)
-
-## save etas to a file
-write.csv(eta, file = "sim_pl_eta_reliability.csv")
+# read etas from file
+eta <- read_csv("sim-pl-eta-reliability.csv")$eta
 
 # read stan model
 stan_model_hierarchical_pl <- stan_model("hierarchical-powerlaw.stan", model_name = "hierarchical-powerlaw")
